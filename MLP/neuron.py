@@ -26,6 +26,10 @@ class Neuron:
 
     @weight_list.setter
     def weight_list(self, weight_list) -> None:
+        if len(weight_list) != len(self._weight_list):
+            raise ValueError(
+                f"Length of input weight list {len(weight_list)} doesn't fit length of existing weight list {len(self._weight_list)}")
+
         self._weight_list = weight_list
 
     @property
