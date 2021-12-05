@@ -5,7 +5,7 @@ from .neuron import Neuron
 
 class Layer:
 
-    def __init__(self, neuron_num: int, input_num: int, activation: str = 'linear') -> None:
+    def __init__(self, neuron_num: int, input_num: int, activation: str = 'sigmoid') -> None:
         self._neuron_list = []
 
         for i in range(neuron_num):

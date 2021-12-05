@@ -6,7 +6,7 @@ from loguru import logger
 
 class Neuron:
 
-    def __init__(self, input_num: int, activation: str = 'linear') -> None:
+    def __init__(self, input_num: int, activation: str = 'sigmoid') -> None:
         self._weight_list = []
 
         for i in range(input_num):
@@ -15,7 +15,7 @@ class Neuron:
         self._bias = random.uniform(-1, 1)
         self._activation = activation
 
-        if self._activation not in {'linear', 'sigmoid', 'tanh'}:
+        if self._activation not in {'linear', 'sigmoid'}:
             raise ValueError(f"Activation function {activation} not exist!")
 
         logger.debug(f"Create neuron, activation:{activation}.")
@@ -49,8 +49,6 @@ class Neuron:
 
         if self._activation == 'sigmoid':
             output = 1 / (1 + numpy.exp(-output))
-        elif self._activation == 'tanh':
-            output = numpy.tanh(output)
 
         logger.debug(f"Neuron input: {input}, output: {output}.")
 
