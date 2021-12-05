@@ -42,8 +42,8 @@ class Neuron:
                 f"Input num {len(input)} doesn't fit neuron input num {len(self._weight_list)}")
 
         output: float = 0
-        for i in range(len(input)):
-            output += input[i] * self._weight_list[i]
+        for single_input, single_weight in zip(input, self._weight_list):
+            output += single_input * single_weight
 
         output += self._bias
 
