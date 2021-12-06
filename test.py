@@ -17,7 +17,12 @@ if __name__ == '__main__':
     logger.level('INFO', color='<green>')
 
     mlp = MLP()
-    mlp.add_layer(neuron_num=100, input_num=1, activation='sigmoid')
-    mlp.add_layer(neuron_num=1, input_num=100, activation='linear')
+    mlp.add_layer(neuron_num=10, input_num=1, activation='sigmoid')
+    mlp.add_layer(neuron_num=10, input_num=10, activation='sigmoid')
+    mlp.add_layer(neuron_num=1, input_num=10, activation='linear')
 
-    logger.info(f"Get network output: {mlp.calc([1])}")
+    logger.info(f"Untrained network output: {mlp.calc([1])}")
+
+    mlp.train(train_data=[[[1], [2]]], epochs=100, step=0.5)
+
+    logger.info(f"Trained network output: {mlp.calc([1])}")
