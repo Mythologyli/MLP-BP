@@ -44,6 +44,10 @@ class Neuron:
     def bias(self, bias) -> None:
         self._bias = bias
 
+    @property
+    def activation(self) -> str:
+        return self._activation
+
     def calc(self, input: list) -> float:
         if len(input) != len(self._weight_list):
             raise ValueError(

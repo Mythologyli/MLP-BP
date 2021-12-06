@@ -7,6 +7,7 @@ class Layer:
 
     def __init__(self, neuron_num: int, input_num: int, activation: str = 'sigmoid') -> None:
         self._neuron_list = []
+        self._activation = activation
 
         for i in range(neuron_num):
             self._neuron_list.append(Neuron(input_num=input_num,
@@ -27,6 +28,10 @@ class Layer:
     @property
     def neuron_num(self) -> int:
         return len(self._neuron_list)
+
+    @property
+    def activation(self) -> str:
+        return self._activation
 
     def calc(self, input: list) -> list:
         output = []
