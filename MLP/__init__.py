@@ -1,3 +1,5 @@
+import pickle
+
 from loguru import logger
 
 from .layer import Layer
@@ -87,6 +89,14 @@ class MLP:
                                               for w, o in zip(neuron.weight_list, last_layer_output)]
 
                         neuron.bias = neuron.bias + step * e
+
+    def save_model(self, file: str) -> None:
+        with open(file, "wb") as f:
+            pickle.dump(self._layer_list, f)
+
+    def load_model(self, file: str) -> None:
+        with open(file, "rb") as f:
+            self._layer_list = pickle.load(f)
 
     def __del__(self) -> None:
         logger.debug('Delete MLP.')

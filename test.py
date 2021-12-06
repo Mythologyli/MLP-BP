@@ -24,5 +24,9 @@ if __name__ == '__main__':
     logger.info(f"Untrained network output: {mlp.calc([1])}")
 
     mlp.train(train_data=[[[1], [2]]], epochs=100, step=0.5)
+    mlp.save_model('./Model/save.mlp')
 
-    logger.info(f"Trained network output: {mlp.calc([1])}")
+    new_mlp = MLP()
+    new_mlp.load_model('./Model/save.mlp')
+
+    logger.info(f"Trained network output: {new_mlp.calc([1])}")
