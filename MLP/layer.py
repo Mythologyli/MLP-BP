@@ -13,6 +13,18 @@ class Layer:
                                             activation=activation))
 
     @property
+    def neuron_list(self) -> list:
+        return self._neuron_list
+
+    @neuron_list.setter
+    def neuron_list(self, neuron_list) -> None:
+        if len(neuron_list) != len(self._neuron_list):
+            raise ValueError(
+                f"Length of input neuron list {len(neuron_list)} doesn't fit length of existing neuron list {len(self._neuron_list)}")
+
+        self._neuron_list = neuron_list
+
+    @property
     def neuron_num(self) -> int:
         return len(self._neuron_list)
 

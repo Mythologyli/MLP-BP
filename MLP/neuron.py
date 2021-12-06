@@ -21,7 +21,7 @@ class Neuron:
         logger.debug(f"Create neuron, activation:{activation}.")
 
     @property
-    def weight_list(self) -> float:
+    def weight_list(self) -> list:
         return self._weight_list
 
     @weight_list.setter
@@ -35,6 +35,14 @@ class Neuron:
     @property
     def input_num(self) -> float:
         return len(self._weight_list)
+
+    @property
+    def bias(self) -> float:
+        return self._bias
+
+    @bias.setter
+    def bias(self, bias) -> None:
+        self._bias = bias
 
     def calc(self, input: list) -> float:
         if len(input) != len(self._weight_list):
