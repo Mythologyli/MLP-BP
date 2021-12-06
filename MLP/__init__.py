@@ -31,7 +31,7 @@ class MLP:
         return output
 
     def train(self, train_data: list, epochs: int, step: float) -> None:
-        for i in range(epochs):
+        for time in range(epochs):
             for single_pair_train_data in train_data:
                 layer_output_list = []
 
@@ -56,8 +56,7 @@ class MLP:
                                              for t, o
                                              in zip(output_desired, output_layer_output_actual)])
 
-                logger.info(
-                    f"Epoch: {i + 1}/{epochs}; Error: {layer_error_list[-1]}")
+                
 
                 # Calculate all hidden layers' error.
                 for i in range(len(layer_output_list) - 2, -1, -1):
@@ -89,6 +88,8 @@ class MLP:
                                               for w, o in zip(neuron.weight_list, last_layer_output)]
 
                         neuron.bias = neuron.bias + step * e
+
+            logger.info(f"Epoch: {time + 1}/{epochs}")
 
     def save_model(self, file: str) -> None:
         with open(file, "wb") as f:
