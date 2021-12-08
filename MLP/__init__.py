@@ -47,16 +47,9 @@ class MLP:
                 layer_error_list = []  # Layer error in reverse order.
 
                 # Calculate output layer error.
-                if self._layer_list[-1].activation == 'sigmoid':
-                    layer_error_list.append([(t - o) * o * (1 - o)
-                                             for t, o
-                                             in zip(output_desired, output_layer_output_actual)])
-                else:
-                    layer_error_list.append([t - o
-                                             for t, o
-                                             in zip(output_desired, output_layer_output_actual)])
-
-                
+                layer_error_list.append([(t - o) * self.derivative(o, self._layer_list[-1].activation)
+                                         for t, o
+                                         in zip(output_desired, output_layer_output_actual)])
 
                 # Calculate all hidden layers' error.
                 for i in range(len(layer_output_list) - 2, -1, -1):
@@ -67,15 +60,12 @@ class MLP:
                                                     for next_layer_error, next_layer_neuron
                                                     in zip(layer_error_list[-1], self._layer_list[i + 1].neuron_list)])
 
-                        if self._layer_list[i].activation == 'sigmoid':
-                            error.append(
-                                layer_output_list[i][j] * (1 - layer_output_list[i][j]) * next_layer_error_sum)
-                        else:
-                            error.append(next_layer_error_sum)
+                        error.append(self.derivative(layer_output_list[i][j],
+                                                     self._layer_list[i].activation) * next_layer_error_sum)
 
                     layer_error_list.append(error)
 
-                # Reverse the layer error list to right order.
+                # Reverse the layer error list to get the right order.
                 layer_error_list.reverse()
 
                 # Update all layers.
@@ -90,6 +80,17 @@ class MLP:
                         neuron.bias = neuron.bias + step * e
 
             logger.info(f"Epoch: {time + 1}/{epochs}")
+
+    def derivative(self, x: float, function_type: str) -> float:
+        if function_type == 'sigmoid':
+            return x * (1 - x)
+        elif function_type == 'ReLU':
+            if x > 0:
+                return 1
+            else:
+                return 0
+        else:
+            return 1
 
     def save_model(self, file: str) -> None:
         with open(file, "wb") as f:

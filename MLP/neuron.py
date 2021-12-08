@@ -15,7 +15,7 @@ class Neuron:
         self._bias = random.uniform(-1, 1)
         self._activation = activation
 
-        if self._activation not in {'linear', 'sigmoid'}:
+        if self._activation not in {'linear', 'sigmoid', 'ReLU'}:
             raise ValueError(f"Activation function {activation} not exist!")
 
         logger.debug(f"Create neuron, activation:{activation}.")
@@ -61,6 +61,8 @@ class Neuron:
 
         if self._activation == 'sigmoid':
             output = 1 / (1 + numpy.exp(-output))
+        elif self._activation == 'ReLU':
+            output = max(0, output)
 
         logger.debug(f"Neuron input: {input}, output: {output}.")
 
