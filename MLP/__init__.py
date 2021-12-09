@@ -1,5 +1,6 @@
 import pickle
 
+import numpy
 from loguru import logger
 
 from .layer import Layer
@@ -30,7 +31,9 @@ class MLP:
 
         return output
 
-    def train(self, train_data: list, epochs: int, step: float) -> None:
+    def train(self, train_data: list, epochs: int, step: float) -> list:
+        loss_list = []
+
         for time in range(epochs):
             for single_pair_train_data in train_data:
                 layer_output_list = []
@@ -79,7 +82,21 @@ class MLP:
 
                         neuron.bias = neuron.bias + step * e
 
-            logger.info(f"Epoch: {time + 1}/{epochs}")
+            if self._layer_list[-1].neuron_num == 1:
+                loss = 0
+
+                for single_pair_train_data in train_data:
+                    # Calculate each layers' output.
+                    output = self.calc(single_pair_train_data[0])
+                    loss += self.get_rmse(output, single_pair_train_data[1])
+                    
+                loss_list.append(loss)
+                logger.info(
+                    f"Epoch: {time + 1}/{epochs}; Loss: {loss}")
+            else:
+                logger.info(f"Epoch: {time + 1}/{epochs}")
+
+        return loss_list
 
     def derivative(self, x: float, function_type: str) -> float:
         if function_type == 'sigmoid':
@@ -91,6 +108,17 @@ class MLP:
                 return 0
         else:
             return 1
+
+    def get_rmse(self, predict_list, true_list) -> float:
+        if len(predict_list) != len(true_list):
+            raise ValueError(
+                f"Length of predict list {len(predict_list)} doesn't fit length of true list {len(true_list)}")
+
+        sum = 0
+        for predict, true in zip(predict_list, true_list):
+            sum += (predict - true) ** 2
+
+        return numpy.sqrt(sum / len(predict_list))
 
     def save_model(self, file: str) -> None:
         with open(file, "wb") as f:
